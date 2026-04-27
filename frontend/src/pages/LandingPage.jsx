@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { waLink } from "../lib/whatsapp";
 import {
     ArrowRight,
@@ -410,24 +410,96 @@ const Mecanismo = () => {
     );
 };
 
-/* ---------------- 5. IMPACTO FINANCEIRO ---------------- */
+/* ---------------- 5. IMPACTO FINANCEIRO — CALCULADORA INTERATIVA ---------------- */
+
+const BRL = (v) =>
+    (v || 0).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+        maximumFractionDigits: 0,
+    });
+
+const Field = ({ label, suffix, value, onChange, min, max, step }) => (
+    <label className="block">
+        <div className="flex items-baseline justify-between">
+            <span className="font-mono-display text-[10px] uppercase tracking-[0.22em] text-white/50">
+                {label}
+            </span>
+            <span className="font-mono-display text-xs text-white/40">
+                {suffix}
+            </span>
+        </div>
+        <input
+            type="number"
+            inputMode="numeric"
+            value={value}
+            min={min}
+            max={max}
+            step={step}
+            onChange={(e) => onChange(Number(e.target.value) || 0)}
+            className="mt-2 w-full border border-white/15 bg-[#0A0A0A] px-4 py-3 font-mono-display text-xl font-bold text-white outline-none transition-colors focus:border-[#25D366]"
+        />
+    </label>
+);
+
+const Slider = ({ label, value, onChange, min = 0, max = 100, suffix = "%" }) => (
+    <label className="block">
+        <div className="flex items-baseline justify-between">
+            <span className="font-mono-display text-[10px] uppercase tracking-[0.22em] text-white/50">
+                {label}
+            </span>
+            <span className="font-mono-display text-base font-bold text-[#25D366]">
+                {value}
+                {suffix}
+            </span>
+        </div>
+        <input
+            type="range"
+            min={min}
+            max={max}
+            value={value}
+            onChange={(e) => onChange(Number(e.target.value))}
+            className="range-grocor mt-3 w-full"
+        />
+    </label>
+);
 
 const Impacto = () => {
-    const rows = [
-        { label: "Leads que chegam / mês", value: "120", color: "white" },
-        {
-            label: "Ignorados ou respondidos tarde",
-            value: "~38%",
-            color: "red",
-        },
-        { label: "Leads perdidos / mês", value: "45", color: "red" },
-        { label: "Ticket médio por venda", value: "R$ 40.000", color: "white" },
-        {
-            label: "Taxa de conversão realista (2%)",
-            value: "0,9 venda",
-            color: "red",
-        },
-    ];
+    const [leads, setLeads] = useState(120);
+    const [ignoradosPct, setIgnoradosPct] = useState(38);
+    const [ticket, setTicket] = useState(40000);
+    const [conversaoPct, setConversaoPct] = useState(2);
+
+    const {
+        leadsPerdidos,
+        vendasPerdidasMes,
+        receitaPerdidaMes,
+        receitaPerdidaAno,
+        vendasRecuperaveisMes,
+        receitaRecuperavelAno,
+    } = useMemo(() => {
+        const lp = Math.round((leads * ignoradosPct) / 100);
+        const vp = (lp * conversaoPct) / 100;
+        const rm = vp * ticket;
+        // Grocor estimate: recovers ~60% of the ignored base into the funnel
+        const vr = vp * 0.6;
+        return {
+            leadsPerdidos: lp,
+            vendasPerdidasMes: vp,
+            receitaPerdidaMes: rm,
+            receitaPerdidaAno: rm * 12,
+            vendasRecuperaveisMes: vr,
+            receitaRecuperavelAno: vr * ticket * 12,
+        };
+    }, [leads, ignoradosPct, ticket, conversaoPct]);
+
+    const waMsg =
+        `Olá Grocor! Fiz a simulação e vi que estou perdendo cerca de ${BRL(receitaPerdidaMes)} por mês (${BRL(receitaPerdidaAno)} por ano).\n\n` +
+        `• Leads/mês: ${leads}\n` +
+        `• Ignorados/atrasados: ${ignoradosPct}%\n` +
+        `• Ticket médio: ${BRL(ticket)}\n` +
+        `• Conversão atual: ${conversaoPct}%\n\n` +
+        `Quero agendar o Diagnóstico Estratégico.`;
 
     return (
         <section
@@ -435,72 +507,199 @@ const Impacto = () => {
             data-testid="impacto-section"
             className="relative bg-[#0F0F0F] py-24 hairline-top sm:py-32"
         >
+            <style>{`
+                .range-grocor {
+                    -webkit-appearance: none;
+                    appearance: none;
+                    height: 4px;
+                    background: rgba(255,255,255,0.12);
+                    outline: none;
+                    cursor: pointer;
+                }
+                .range-grocor::-webkit-slider-thumb {
+                    -webkit-appearance: none;
+                    appearance: none;
+                    width: 20px;
+                    height: 20px;
+                    background: #25D366;
+                    border: 2px solid #0A0A0A;
+                    cursor: pointer;
+                    box-shadow: 0 0 0 1px #25D366;
+                }
+                .range-grocor::-moz-range-thumb {
+                    width: 20px;
+                    height: 20px;
+                    background: #25D366;
+                    border: 2px solid #0A0A0A;
+                    cursor: pointer;
+                    box-shadow: 0 0 0 1px #25D366;
+                }
+                .range-grocor::-webkit-slider-runnable-track {
+                    background: linear-gradient(to right, #25D366 var(--p, 0%), rgba(255,255,255,0.12) var(--p, 0%));
+                }
+            `}</style>
+
             <div className="container-x grid gap-12 lg:grid-cols-12 lg:gap-16">
                 <div className="lg:col-span-5">
-                    <Tag color="red">05 · Impacto financeiro</Tag>
+                    <Tag color="red">05 · Calculadora de perda</Tag>
                     <h2 className="mt-5 font-display text-3xl font-extrabold leading-[1.05] tracking-tighter text-white sm:text-4xl lg:text-5xl">
-                        A matemática da{" "}
-                        <span className="text-[#FF3B30]">perda invisível.</span>
+                        Quanto você está perdendo{" "}
+                        <span className="text-[#FF3B30]">agora?</span>
                     </h2>
                     <p className="mt-5 font-body text-base text-white/60 sm:text-lg">
-                        Exemplo conservador para um corretor ou imobiliária de
-                        porte médio. Faça a conta do seu negócio depois.
+                        Ajuste os números da sua operação. Os cálculos atualizam
+                        em tempo real. Sem fórmula mágica — só a matemática que
+                        já sai do seu caixa.
                     </p>
 
-                    <div className="mt-10 border border-[#FF3B30]/40 bg-[#FF3B30]/5 p-6 sm:p-8">
+                    <div className="mt-8 border border-[#FF3B30]/40 bg-[#FF3B30]/5 p-6 sm:p-8">
                         <div className="font-mono-display text-xs uppercase tracking-[0.22em] text-[#FF3B30]">
-                            Perda estimada / mês
+                            Receita perdida / mês
                         </div>
-                        <div className="mt-3 font-mono-display text-5xl font-bold leading-none text-[#FF3B30] sm:text-6xl lg:text-7xl">
-                            R$ 1.800.000
+                        <div
+                            data-testid="calc-perda-mes"
+                            className="mt-3 font-mono-display text-4xl font-bold leading-none text-[#FF3B30] sm:text-5xl lg:text-6xl"
+                        >
+                            {BRL(receitaPerdidaMes)}
                         </div>
-                        <div className="mt-4 font-body text-sm text-white/60">
-                            Em oportunidades reais, não em fantasia. Essa conta
-                            sai do seu caixa todo mês — e ninguém vê.
+                        <div className="mt-4 flex items-baseline justify-between border-t border-[#FF3B30]/20 pt-4">
+                            <span className="font-mono-display text-[10px] uppercase tracking-[0.22em] text-white/50">
+                                No ano
+                            </span>
+                            <span
+                                data-testid="calc-perda-ano"
+                                className="font-mono-display text-2xl font-bold text-[#FF3B30]"
+                            >
+                                {BRL(receitaPerdidaAno)}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div className="mt-6 border border-[#25D366]/40 bg-[#25D366]/5 p-6 sm:p-8">
+                        <div className="font-mono-display text-xs uppercase tracking-[0.22em] text-[#25D366]">
+                            Potencial de recuperação com Grocor / ano
+                        </div>
+                        <div
+                            data-testid="calc-recuperavel-ano"
+                            className="mt-3 font-mono-display text-3xl font-bold leading-none text-[#25D366] sm:text-4xl lg:text-5xl"
+                        >
+                            + {BRL(receitaRecuperavelAno)}
+                        </div>
+                        <div className="mt-3 font-body text-xs text-white/50">
+                            Estimativa conservadora baseada em 60% dos leads
+                            ignorados sendo reativados e convertidos.
                         </div>
                     </div>
                 </div>
 
                 <div className="lg:col-span-7">
-                    <div className="border border-white/10">
-                        <div className="flex items-center justify-between border-b border-white/10 bg-[#0A0A0A] px-6 py-4">
+                    <div className="border border-white/10 bg-[#0A0A0A]">
+                        <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
                             <span className="font-mono-display text-[11px] uppercase tracking-[0.2em] text-white/50">
-                                Simulação · mercado imobiliário
+                                Simulador · sua operação
                             </span>
                             <span className="font-mono-display text-[11px] text-[#25D366]">
-                                ● ao vivo
+                                ● editável
                             </span>
                         </div>
-                        <ul className="divide-y divide-white/10 bg-[#0A0A0A]">
-                            {rows.map((r, i) => (
+
+                        <div className="grid grid-cols-1 gap-6 p-6 sm:grid-cols-2 sm:p-8">
+                            <Field
+                                label="Leads recebidos / mês"
+                                suffix="leads"
+                                value={leads}
+                                onChange={setLeads}
+                                min={0}
+                                max={100000}
+                                step={5}
+                            />
+                            <Field
+                                label="Ticket médio por venda"
+                                suffix="R$"
+                                value={ticket}
+                                onChange={setTicket}
+                                min={0}
+                                max={10000000}
+                                step={1000}
+                            />
+                            <div className="sm:col-span-2">
+                                <Slider
+                                    label="Leads ignorados ou respondidos com atraso"
+                                    value={ignoradosPct}
+                                    onChange={setIgnoradosPct}
+                                    min={0}
+                                    max={90}
+                                />
+                            </div>
+                            <div className="sm:col-span-2">
+                                <Slider
+                                    label="Taxa de conversão atual (lead → venda)"
+                                    value={conversaoPct}
+                                    onChange={setConversaoPct}
+                                    min={0}
+                                    max={30}
+                                />
+                            </div>
+                        </div>
+
+                        <ul className="divide-y divide-white/10 border-t border-white/10">
+                            {[
+                                [
+                                    "Leads perdidos / mês",
+                                    `${leadsPerdidos}`,
+                                    "red",
+                                ],
+                                [
+                                    "Vendas perdidas / mês",
+                                    `${vendasPerdidasMes.toFixed(1)}`,
+                                    "red",
+                                ],
+                                [
+                                    "Vendas recuperáveis / mês",
+                                    `+${vendasRecuperaveisMes.toFixed(1)}`,
+                                    "green",
+                                ],
+                            ].map(([label, value, color]) => (
                                 <li
-                                    key={r.label}
-                                    data-testid={`impacto-row-${i}`}
-                                    className="flex items-center justify-between gap-4 px-6 py-5"
+                                    key={label}
+                                    className="flex items-center justify-between gap-4 px-6 py-4 sm:px-8"
                                 >
-                                    <span className="font-body text-sm text-white/70 sm:text-base">
-                                        {r.label}
+                                    <span className="font-body text-sm text-white/70">
+                                        {label}
                                     </span>
                                     <span
-                                        className={`font-mono-display text-lg font-bold sm:text-2xl ${
-                                            r.color === "red"
+                                        className={`font-mono-display text-lg font-bold sm:text-xl ${
+                                            color === "red"
                                                 ? "text-[#FF3B30]"
-                                                : "text-white"
+                                                : "text-[#25D366]"
                                         }`}
                                     >
-                                        {r.value}
+                                        {value}
                                     </span>
                                 </li>
                             ))}
-                            <li className="flex items-center justify-between gap-4 bg-gradient-to-r from-[#FF3B30]/10 to-transparent px-6 py-6">
-                                <span className="font-display text-base font-extrabold text-white sm:text-lg">
-                                    Receita não capturada
-                                </span>
-                                <span className="font-mono-display text-2xl font-bold text-[#FF3B30] sm:text-3xl">
-                                    R$ 1,8M / mês
-                                </span>
-                            </li>
                         </ul>
+
+                        <div className="border-t border-white/10 p-6 sm:p-8">
+                            <a
+                                href={waLink(waMsg)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                data-testid="calc-whatsapp-cta"
+                                className="btn-wa w-full"
+                            >
+                                <WhatsAppIcon className="h-5 w-5" />
+                                <span>Enviar meus números no WhatsApp</span>
+                                <ArrowRight
+                                    className="h-4 w-4 -mr-1"
+                                    strokeWidth={3}
+                                />
+                            </a>
+                            <p className="mt-4 text-center font-body text-xs text-white/40">
+                                Sua simulação vai automática na mensagem. É só
+                                apertar enviar.
+                            </p>
+                        </div>
                     </div>
 
                     <p className="mt-8 font-display text-xl font-extrabold leading-tight text-white sm:text-2xl">

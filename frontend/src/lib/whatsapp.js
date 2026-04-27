@@ -1,6 +1,6 @@
 // Centralized WhatsApp configuration.
 // Replace WHATSAPP_NUMBER with your real number (country code + DDD + number, digits only).
-export const WHATSAPP_NUMBER = "5511999999999";
+export const WHATSAPP_NUMBER = "5511921388178";
 
 const DEFAULT_MESSAGE =
     "Olá! Quero agendar um Diagnóstico Estratégico Grocor e descobrir quanto estou perdendo em vendas hoje.";
