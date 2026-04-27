@@ -1,0 +1,146 @@
+{
+  "theme": "dark",
+  "archetype": "Archetype 4 (Swiss & High-Contrast) - Dark Variant",
+  "domain": "Business Consulting, B2B High-Ticket",
+  "colors": {
+    "background": "#0A0A0A",
+    "surface": "#141414",
+    "surface_secondary": "#1E1E1E",
+    "text_primary": "#FAFAFA",
+    "text_secondary": "#A3A3A3",
+    "accent_primary": "#25D366",
+    "accent_primary_hover": "#1DA851",
+    "accent_danger": "#FF3B30",
+    "accent_warning": "#FFCC00"
+  },
+  "typography": {
+    "fonts_to_import": ["Epilogue", "Manrope", "JetBrains Mono"],
+    "headings": "font-sans font-extrabold tracking-tighter",
+    "body": "font-sans text-text_secondary leading-relaxed",
+    "mono": "font-mono",
+    "font_sizes": {
+      "h1": "text-5xl sm:text-6xl lg:text-7xl",
+      "h2": "text-3xl sm:text-4xl lg:text-5xl",
+      "h3": "text-xl sm:text-2xl",
+      "body": "text-base sm:text-lg",
+      "small": "text-sm tracking-[0.2em] uppercase font-bold"
+    }
+  },
+  "spacing_and_layout": {
+    "section_padding": "py-24 sm:py-32",
+    "container_padding": "px-6 sm:px-8 max-w-7xl mx-auto",
+    "bento_gap": "gap-6 sm:gap-8",
+    "border_radius": "rounded-none sm:rounded-sm",
+    "borders": "border border-white/10"
+  },
+  "motion_and_interaction": {
+    "hover_state": "transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)]",
+    "button_primary": "bg-[#25D366] text-[#0A0A0A] font-bold py-4 px-8 uppercase tracking-wide transition-transform hover:scale-105 flex items-center justify-center gap-2",
+    "card_hover": "hover:border-[#25D366]/40 transition-colors"
+  },
+  "components_strategy": {
+    "hero": "Left-aligned, authoritative massive typography. Abstract dark background with 40% overlay for deep contrast. The WhatsApp CTA must be the primary anchor.",
+    "cards": "Brutalist bento grid. 1px solid border (border-white/10), dark surface. Sharp corners. Avoid default Shadcn card padding if it constraints the grid.",
+    "cta_buttons": "Solid #25D366, sharp corners, aggressive bold text. Always accompanied by a WhatsApp icon.",
+    "icons": "Use lucide-react or phosphor-icons/react. Icon styles must be sharp and professional.",
+    "financial_impact": "Use JetBrains Mono for large red numbers bleeding out, switching to green when showing the ROI of the Grocor system."
+  },
+  "media": {
+    "hero_background": {
+      "url": "https://images.pexels.com/photos/3612932/pexels-photo-3612932.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Abstract dark hexagonal pattern for hero background overlay. Represents system and structure."
+    },
+    "system_showcase": {
+      "url": "https://images.pexels.com/photos/2047909/pexels-photo-2047909.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Sleek tech setup with glowing phone representing the automated follow-up system. Use in SOLUCAO section."
+    },
+    "target_audience": {
+      "url": "https://images.unsplash.com/photo-1776935359455-94263068537c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2OTF8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBsdXh1cnklMjByZWFsJTIwZXN0YXRlJTIwYXJjaGl0ZWN0dXJlJTIwZGFya3xlbnwwfHx8fDE3NzczMTA1NzF8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Modern luxury fireplace representing the high-ticket target audience (real estate/clinics)."
+    },
+    "founder_or_persona": {
+      "url": "https://images.unsplash.com/photo-1758691737644-ef8be18256c3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzl8MHwxfHNlYXJjaHwyfHxidXNpbmVzcyUyMG93bmVyJTIwcG9ydHJhaXQlMjBzZXJpb3VzfGVufDB8fHx8MTc3NzMxMDU3MXww&ixlib=rb-4.1.0&q=85",
+      "description": "Serious business owner looking straight at camera, used for the 'Filtro' or 'Enemy' section."
+    }
+  },
+  "sections": [
+    {
+      "id": "hero",
+      "name": "1. HERO",
+      "guidelines": "Massive H1 'Você não perde dinheiro na captação. Perde na operação.' Highlight 'Perde na operação' in Red or pure White while rest is grey. Primary CTA 'Agendar Diagnóstico via WhatsApp'."
+    },
+    {
+      "id": "problema",
+      "name": "2. PROBLEMA",
+      "guidelines": "Bento grid of 'Perdas invisíveis'. Red accents. Metrics: 'Leads sem resposta', 'Follow-up inexistente', 'Clientes que somem'."
+    },
+    {
+      "id": "inimigo",
+      "name": "3. INIMIGO COMUM",
+      "guidelines": "Stark typography section calling out agencies that only generate leads without sales processes. High contrast, aggressive tone."
+    },
+    {
+      "id": "mecanismo",
+      "name": "4. INTRODUÇÃO DA IA",
+      "guidelines": "Visual flow showing Lead -> IA -> Hot Lead -> Sale. Clean, practical, not tech-heavy."
+    },
+    {
+      "id": "impacto_financeiro",
+      "name": "5. IMPACTO FINANCEIRO",
+      "guidelines": "Highly visual calculator showing R$20K+ lost per ignored lead. Use JetBrains Mono for numbers. High contrast red vs white."
+    },
+    {
+      "id": "solucao",
+      "name": "6. SOLUÇÃO",
+      "guidelines": "Introduce 'Grocor DealFlow System'. Showcase the 'system_showcase' media. Focus on Speed, Persistence, Intelligence."
+    },
+    {
+      "id": "beneficios",
+      "name": "7. BENEFÍCIOS",
+      "guidelines": "Grid layout highlighting: more answers, visits, proposals, sales."
+    },
+    {
+      "id": "como_funciona",
+      "name": "8. COMO FUNCIONA",
+      "guidelines": "4-step staggered vertical list: Diagnóstico -> Estruturação -> Implementação -> Otimização. Minimalist numbered steps."
+    },
+    {
+      "id": "prova_logica",
+      "name": "9. PROVA LÓGICA",
+      "guidelines": "Highlight box. 'Se o sistema gerar 1 venda a mais, já paga o investimento inteiro'. High trust, perhaps a dark green border."
+    },
+    {
+      "id": "cta_intermediario",
+      "name": "10. CTA INTERMEDIÁRIO",
+      "guidelines": "Centered block with 'Falar no WhatsApp' CTA button."
+    },
+    {
+      "id": "filtro",
+      "name": "11. FILTRO",
+      "guidelines": "Two columns: 'Para quem é' (Green checkmarks, real estate/clinics) and 'Não é' (Red crosses, beginners)."
+    },
+    {
+      "id": "urgencia",
+      "name": "12. URGÊNCIA",
+      "guidelines": "Darkest section. Warning that competitors are already responding faster. Warning Yellow or Red accent."
+    },
+    {
+      "id": "cta_final",
+      "name": "13. CTA FINAL",
+      "guidelines": "Huge footer-like CTA block. 'Agendar Diagnóstico Estratégico'. Final push to WhatsApp."
+    }
+  ],
+  "accessibility_and_testing": {
+    "data_testid_rules": "All CTAs, accordions, and interactive elements MUST have a data-testid attribute. e.g., 'data-testid=\"hero-whatsapp-cta\"'.",
+    "contrast": "Ensure pure white text against #0A0A0A background meets APCA contrast standards."
+  },
+  "instructions_to_main_agent": [
+    "Use standard Tailwind classes. Do NOT write custom CSS unless absolutely necessary.",
+    "Setup Epilogue and Manrope fonts in your layout.",
+    "ALL CALL-TO-ACTIONS MUST BE WHATSAPP LINKS. DO NOT IMPLEMENT ANY FORMS. The user explicitly requested 'apenas redirecione para whatsapp'.",
+    "Emphasize the financial loss in Red, and the solution/profit in Green.",
+    "Bento box grids must use pure CSS Grid or Tailwind grid utilities. Use p-6 or p-8 for internal padding of bordered items.",
+    "The design must feel premium, aggressive, and highly corporate-brutalist. Avoid soft, playful shadows.",
+    "Implement the 13 required sections in the exact order specified."
+  ]
+}
